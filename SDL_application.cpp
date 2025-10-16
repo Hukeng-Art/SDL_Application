@@ -26,9 +26,12 @@ public:
 			throw std::runtime_error("Error initiating SDL.");
 		}
 		
+		// add back once TTF works on pib
+		/*
 		if (!TTF_Init()) { // if TTF_Init fails, then...
 			throw std::runtime_error("Error initiating TTF.");
 		}
+		*/
 		
 		// SDL_CreateWindow() returns pointer to window
 		window = SDL_CreateWindow(window_title, window_width, window_height, 0);
@@ -78,7 +81,7 @@ public:
 			window = NULL;             // set dangling pointer to null
 		}
 		
-		TTF_Quit(); // bring ttf module offline
+		//	TTF_Quit(); // bring ttf module offline
 		SDL_Quit(); // bring sdl module offline
 		
 	}
