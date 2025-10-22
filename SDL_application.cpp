@@ -20,18 +20,16 @@ class SDL_application {
 	
 public:
 
-	SDL_application(int window_width, int window_height, const char* window_title = "Application", const char* icon = "assets/icon.png") { // Constructor
+	SDL_application(int window_width = 800, int window_height = 500, const char* window_title = "Application", const char* icon = "assets/icon.png") { // Constructor
 		
 		if (!SDL_Init(SDL_FLAGS)) { // if SDL_Init fails, then...
 			throw std::runtime_error("Error initiating SDL.");
 		}
 		
-		// add back once TTF works on pib
-		/*
+		
 		if (!TTF_Init()) { // if TTF_Init fails, then...
 			throw std::runtime_error("Error initiating TTF.");
 		}
-		*/
 		
 		// SDL_CreateWindow() returns pointer to window
 		window = SDL_CreateWindow(window_title, window_width, window_height, 0);
@@ -63,6 +61,8 @@ public:
 		SDL_DestroySurface(icon_surf); // free storage
 		
 		is_running = true;
+		
+		setup_ext();
 			
 	}
 	
@@ -81,7 +81,7 @@ public:
 			window = NULL;             // set dangling pointer to null
 		}
 		
-		//	TTF_Quit(); // bring ttf module offline
+		TTF_Quit(); // bring ttf module offline
 		SDL_Quit(); // bring sdl module offline
 		
 	}
@@ -155,10 +155,9 @@ private:
 	
 	// Virtual functions - extend in child classes
 	
-	virtual void events_ext(int event_type) {}
+	virtual void events_ext(SDL_Event event) {}
 	virtual void update_ext() {}
 	virtual void draw_ext() {}
-	virtual void free_ext() {}
 	
 
 
