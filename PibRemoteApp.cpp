@@ -6,11 +6,13 @@
 #include "../Pib/Pib_Tinkerforge/Classes/Robot.cpp"
 
 
+#define BRICKLET_NUM 3
+#define SERVO_DELAY 10
+#define FINGER_SPEED_SCALE 3
 
-
-#define SERVO_SPEED 10
+#define SERVO_SPEED 200
 #define BLINK_DURATION 10000
-#define INVERSION {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+#define INVERSION {{1,1,1,-1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1,1,1}}
 
 class PibRemoteApp {
 	
@@ -29,9 +31,9 @@ class PibRemoteApp {
 	
 	
 	Robot* robot;
-	int moving_servos[30];
-	int servo_positions[30];
-	int inversion[30] = INVERSION;
+	int moving_servos[3][10];
+	int servo_positions[3][10];
+	int inversion[3][10] = INVERSION;
 	
 	std::vector<SDL_Texture*> pib_eyes;
 	
@@ -169,48 +171,61 @@ private:
 				
 				switch (event.key.scancode) {
 					// shoulder
-					case SDL_SCANCODE_A:
-						moving_servos[10] = 1;
-					case SDL_SCANCODE_D:
-						moving_servos[10] = -1;
-					case SDL_SCANCODE_W:
-						moving_servos[11] = 1;
-					case SDL_SCANCODE_S:
-						moving_servos[11] = -1;
-					//upper arm
-					case SDL_SCANCODE_Q:
-						moving_servos[9] = 1;
 					case SDL_SCANCODE_E:
-						moving_servos[9] = -1;
+						moving_servos[1][0] = 1;
+						break;
+					case SDL_SCANCODE_Q:
+						moving_servos[1][0] = -1;
+						break;
+					case SDL_SCANCODE_S:
+						moving_servos[1][1] = 1;
+						break;
+					case SDL_SCANCODE_W:
+						moving_servos[1][1] = -1;
+						break;
+					//upper arm
+					case SDL_SCANCODE_D:
+						moving_servos[0][9] = 1;
+						break;
+					case SDL_SCANCODE_A:
+						moving_servos[0][9] = -1;
+						break;
 					// elbow
 					case SDL_SCANCODE_I:
-						moving_servos[8] = 1;
+						moving_servos[0][8] = 1;
+						break;
 					case SDL_SCANCODE_K:
-						moving_servos[8] = -1;
+						moving_servos[0][8] = -1;
+						break;
 					// wrist rotation
-					case SDL_SCANCODE_J:
-						moving_servos[7] = 1;
 					case SDL_SCANCODE_L:
-						moving_servos[7] = -1;
+						moving_servos[0][7] = 1;
+						break;
+					case SDL_SCANCODE_J:
+						moving_servos[0][7] = -1;
+						break;
 					// fingers
-					case SDL_SCANCODE_R:
-						moving_servos[2] = 1;
-						moving_servos[3] = 1;
-						moving_servos[4] = 1;
-						moving_servos[5] = 1;
-					case SDL_SCANCODE_T:
-						moving_servos[2] = -1;
-						moving_servos[3] = -1;
-						moving_servos[4] = -1;
-						moving_servos[5] = -1;
+					case SDL_SCANCODE_P:
+						moving_servos[0][2] = FINGER_SPEED_SCALE;
+						moving_servos[0][3] = FINGER_SPEED_SCALE;
+						moving_servos[0][4] = FINGER_SPEED_SCALE;
+						moving_servos[0][5] = FINGER_SPEED_SCALE;
+						break;
+					case SDL_SCANCODE_O:
+						moving_servos[0][2] = -1 * FINGER_SPEED_SCALE;
+						moving_servos[0][3] = -1 * FINGER_SPEED_SCALE;
+						moving_servos[0][4] = -1 * FINGER_SPEED_SCALE;
+						moving_servos[0][5] = -1 * FINGER_SPEED_SCALE;
+						break;
 					//thumb
-					case SDL_SCANCODE_G:
-						moving_servos[0] = 1;
-						moving_servos[1] = 1;
 					case SDL_SCANCODE_H:
-						moving_servos[0] = -1;
-						moving_servos[1] = -1;
-				
+						moving_servos[0][0] = FINGER_SPEED_SCALE;;
+						moving_servos[0][1] = FINGER_SPEED_SCALE;;
+						break;
+					case SDL_SCANCODE_U:
+						moving_servos[0][0] = -1 * FINGER_SPEED_SCALE;;
+						moving_servos[0][1] = -1 * FINGER_SPEED_SCALE;;
+						break;
 					default:
 						break;
 				}
@@ -222,14 +237,27 @@ private:
 	
 	void update_ext() {
 		
-		for (int i = 0; i < sizeof(moving_servos) / sizeof(moving_servos[0]); i++) {
-			if (moving_servos[i] != 0 && abs(servo_positions[i]) <= 9000) {
-				
-				servo_positions[i] += SERVO_SPEED * inversion[i] * moving_servos[i];
-				robot->servos.set_servo_pos((int)(i / 10), i % 10, servo_positions[i]);
-				moving_servos[i] = 0;
+		for (int i = 0; i < BRICKLET_NUM; i++) {
+			for (int j = 0; j < 10; j++) {
+				if (moving_servos[i][j] != 0) {
+					
+					servo_positions[i][j] += SERVO_SPEED * inversion[i][j] * moving_servos[i][j];
+					
+					// putting everything in one statement causes unexpected behavior
+					if (servo_positions[i][j] > 9000) {
+						servo_positions[i][j] = 9000;
+					} else if (servo_positions[i][j] < -9000) {
+						servo_positions[i][j] = -9000;
+					}
+					
+					robot->servos.set_servo_pos(i, j, servo_positions[i][j]);
+					moving_servos[i][j] = 0;
+					//SDL_Delay(SERVO_DELAY);
 			
+				}
+				
 			}
+			
 		}
 			
 		if (eye_counter == BLINK_DURATION) {
@@ -241,22 +269,23 @@ private:
 	}
 	
 	void draw_ext() {
-		SDL_RenderClear(renderer); // clear renderer buffer
 	
 		// last two params: pointers to source frect and target frect, null for full image & full screen
 		SDL_RenderTexture(renderer, pib_eyes[eye_index], NULL, NULL);
 	
-		SDL_RenderPresent(renderer);
 	}
 	
 	void setup_ext() {
 		robot = new Robot("a");
 		
+		robot->servos.set_servo_pos(0, 8, -4500);
+		robot->servos.set_servo_pos(2, 8, -4500);
+		
+		
 		pib_eyes.push_back(IMG_LoadTexture(renderer,"assets/pibEyes/eyes01.png"));
 		pib_eyes.push_back(IMG_LoadTexture(renderer,"assets/pibEyes/eyes02.png"));
 		pib_eyes.push_back(IMG_LoadTexture(renderer,"assets/pibEyes/eyes03.png"));
 		pib_eyes.push_back(IMG_LoadTexture(renderer,"assets/pibEyes/eyes04.png"));
-		pib_eyes.push_back(IMG_LoadTexture(renderer,"assets/pibEyes/eyes05.png"));
 		
 		eye_counter = 0;
 		eye_index = 0;
