@@ -14,21 +14,13 @@ class SDL_application {
 	clock_t end;
 	double delta;
 	
-	// Default values - override in subclass
-	int window_width = 800;
-	int window_height = 500;
-	bool window_resizable = true;
-	const char* window_title = "Application";
-	const char* icon = "assets/icon.png";
-	
-	// debug vars, delete/comment out later
 	int debug_cycle_counter = 0;
 	double debug_second_counter = 0;
 	
 	
 public:
 
-	SDL_application() { // Constructor
+	SDL_application(int window_width = 800, int window_height = 500, const char* window_title = "Application", const char* icon = "assets/icon.png") { // Constructor
 		
 		if (!SDL_Init(SDL_FLAGS)) { // if SDL_Init fails, then...
 			throw std::runtime_error("Error initiating SDL.");
@@ -47,8 +39,7 @@ public:
 			throw std::runtime_error("Error creating Window.");
 		}
 		
-		// set window to resizable (true by default)
-		SDL_SetWindowResizable(window, window_resizable);
+		SDL_SetWindowResizable(window, true);
 		
 		// SDL_CreateRenderer() returns pointer to renderer for window
 		renderer = SDL_CreateRenderer(window, NULL);
@@ -70,12 +61,15 @@ public:
 		SDL_DestroySurface(icon_surf); // free storage
 		
 		is_running = true;
+		
+		setup_ext();
 			
 	}
 	
 	
 	~SDL_application(){ // DESTRUCTOR - CLEAN UP MEMORY
 		
+		free_ext();
 		
 		if (renderer) { // if pointer to renderer is available
 			SDL_DestroyRenderer(renderer); // free memory at renderer pointer
@@ -108,20 +102,20 @@ private:
 	void events() {
 		while (SDL_PollEvent(&event)) { // poll until all events are handled
 		
-			// check struct type of event
-			// adapt action based on type
-			switch (event.type) { 
-				
-				case SDL_EVENT_QUIT: // close game
-					is_running = false;
-					break;
-				
-				default:
-					break;
-			}
+		// check struct type of event
+		// adapt action based on type
+		switch (event.type) { 
 			
-			events_ext(event);
+			case SDL_EVENT_QUIT: // close game
+				is_running = false;
+				break;
 			
+			default:
+				break;
+		}
+		
+		events_ext(event.type);
+		
 		}	
 		
 	}

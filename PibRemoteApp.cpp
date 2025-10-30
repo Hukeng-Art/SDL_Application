@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 
-#include "SDL_application.h"
+#include "PibRemoteApp.h"
 
 #include "../Pib/Pib_Tinkerforge/Classes/Robot.cpp"
 
@@ -41,10 +41,17 @@ class PibRemoteApp {
 	int eye_index;
 	
 	
+	// Default values - override in subclass
+	int window_width = 800;
+	int window_height = 500;
+	bool window_resizable = true;
+	const char* window_title = "Application";
+	const char* icon = "assets/icon.png";
+	
 	
 public:
 
-	PibRemoteApp(int window_width = 800, int window_height = 500, const char* window_title = "Application", const char* icon = "assets/icon.png") { // Constructor
+	PibRemoteApp() { // Constructor
 		
 		if (!SDL_Init(SDL_FLAGS)) { // if SDL_Init fails, then...
 			throw std::runtime_error("Error initiating SDL.");
@@ -58,7 +65,7 @@ public:
 			throw std::runtime_error("Error creating Window.");
 		}
 		
-		SDL_SetWindowResizable(window, true);
+		SDL_SetWindowResizable(window, window_resizable);
 		
 		// SDL_CreateRenderer() returns pointer to renderer for window
 		renderer = SDL_CreateRenderer(window, NULL);
@@ -250,7 +257,7 @@ private:
 						servo_positions[i][j] = -9000;
 					}
 					
-					robot->servos.set_servo_pos(i, j, servo_positions[i][j]);
+					robot->servos->set_servo_pos(i, j, servo_positions[i][j]);
 					moving_servos[i][j] = 0;
 					//SDL_Delay(SERVO_DELAY);
 			
@@ -278,8 +285,8 @@ private:
 	void setup_ext() {
 		robot = new Robot("a");
 		
-		robot->servos.set_servo_pos(0, 8, -4500);
-		robot->servos.set_servo_pos(2, 8, -4500);
+		robot->servos->set_servo_pos(0, 8, -4500);
+		robot->servos->set_servo_pos(2, 8, -4500);
 		
 		
 		pib_eyes.push_back(IMG_LoadTexture(renderer,"assets/pibEyes/eyes01.png"));

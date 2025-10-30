@@ -5,7 +5,7 @@
 #include <SDL3/SDL_main.h>
 #include <SDL3/SDL_video.h>
 #include <SDL3_image/SDL_image.h>
-#include <SDL3_ttf/SDL_ttf.h> //add back once SDL_ttf works on Pib
+//#include <SDL3_ttf/SDL_ttf.h> //add back once SDL_ttf works on Pib
 #include <stdio.h>
 #include <iostream>
 #include <stdbool.h>
