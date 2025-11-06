@@ -170,76 +170,70 @@ private:
 	}
 	
 	
-	// Virtual functions - extend in child classes
-	
 	void events_ext(SDL_Event event) {
-		switch (event.type) {
-			case SDL_EVENT_KEY_DOWN:
-				
-				switch (event.key.scancode) {
-					// shoulder
-					case SDL_SCANCODE_E:
-						moving_servos[1][0] = 1;
-						break;
-					case SDL_SCANCODE_Q:
-						moving_servos[1][0] = -1;
-						break;
-					case SDL_SCANCODE_S:
-						moving_servos[1][1] = 1;
-						break;
-					case SDL_SCANCODE_W:
-						moving_servos[1][1] = -1;
-						break;
-					//upper arm
-					case SDL_SCANCODE_D:
-						moving_servos[0][9] = 1;
-						break;
-					case SDL_SCANCODE_A:
-						moving_servos[0][9] = -1;
-						break;
-					// elbow
-					case SDL_SCANCODE_I:
-						moving_servos[0][8] = 1;
-						break;
-					case SDL_SCANCODE_K:
-						moving_servos[0][8] = -1;
-						break;
-					// wrist rotation
-					case SDL_SCANCODE_L:
-						moving_servos[0][7] = 1;
-						break;
-					case SDL_SCANCODE_J:
-						moving_servos[0][7] = -1;
-						break;
-					// fingers
-					case SDL_SCANCODE_P:
-						moving_servos[0][2] = FINGER_SPEED_SCALE;
-						moving_servos[0][3] = FINGER_SPEED_SCALE;
-						moving_servos[0][4] = FINGER_SPEED_SCALE;
-						moving_servos[0][5] = FINGER_SPEED_SCALE;
-						break;
-					case SDL_SCANCODE_O:
-						moving_servos[0][2] = -1 * FINGER_SPEED_SCALE;
-						moving_servos[0][3] = -1 * FINGER_SPEED_SCALE;
-						moving_servos[0][4] = -1 * FINGER_SPEED_SCALE;
-						moving_servos[0][5] = -1 * FINGER_SPEED_SCALE;
-						break;
-					//thumb
-					case SDL_SCANCODE_H:
-						moving_servos[0][0] = FINGER_SPEED_SCALE;;
-						moving_servos[0][1] = FINGER_SPEED_SCALE;;
-						break;
-					case SDL_SCANCODE_U:
-						moving_servos[0][0] = -1 * FINGER_SPEED_SCALE;;
-						moving_servos[0][1] = -1 * FINGER_SPEED_SCALE;;
-						break;
-					default:
-						break;
-				}
-			
-			default:
-				break;
+		const bool* key_states = SDL_GetKeyboardState(NULL);
+		
+		// upper arm
+		if (key_states[SDL_SCANCODE_E]) {
+			moving_servos [1][0] = 1;
 		}
+		if (key_states[SDL_SCANCODE_Q]) {
+			moving_servos [1][0] = -1;
+		}
+		// shoulder vertical
+		if (key_states[SDL_SCANCODE_W]) {
+			moving_servos[1][1] = -1;
+		}
+		if (key_states[SDL_SCANCODE_S]) {
+			moving_servos[1][1] = 1;
+		}
+		// shoulder horizontal
+		if (key_states[SDL_SCANCODE_D]) {
+			moving_servos[0][9] = -1;
+		}
+		if (key_states[SDL_SCANCODE_A]) {
+			moving_servos [0][9] = 1;
+		}
+		if (key_states[SDL_SCANCODE_I]) {
+			moving_servos [0][8] = 1;
+		}
+		// elbow
+		if (key_states[SDL_SCANCODE_K]) {
+			moving_servos [0][8] = -1;
+		}
+		if (key_states[SDL_SCANCODE_K]) {
+			moving_servos [0][8] = -1;
+		}
+		// wrist rotation
+		if (key_states[SDL_SCANCODE_L]) {
+			moving_servos [0][7] = 1;
+		}
+		if (key_states[SDL_SCANCODE_J]) {
+			moving_servos [0][7] = -1;
+		}
+		//fingers
+		if (key_states[SDL_SCANCODE_P]) {
+			moving_servos[0][2] = FINGER_SPEED_SCALE;
+			moving_servos[0][3] = FINGER_SPEED_SCALE;
+			moving_servos[0][4] = FINGER_SPEED_SCALE;
+			moving_servos[0][5] = FINGER_SPEED_SCALE;
+		}
+		if (key_states[SDL_SCANCODE_O]) {
+			moving_servos[0][2] = -1 * FINGER_SPEED_SCALE;
+			moving_servos[0][3] = -1 * FINGER_SPEED_SCALE;
+			moving_servos[0][4] = -1 * FINGER_SPEED_SCALE;
+			moving_servos[0][5] = -1 * FINGER_SPEED_SCALE;
+		}
+		// thumb
+		if (key_states[SDL_SCANCODE_H]) {
+			moving_servos[0][0] = FINGER_SPEED_SCALE;
+			moving_servos[0][1] = FINGER_SPEED_SCALE;
+		}
+		if (key_states[SDL_SCANCODE_U]) {
+			moving_servos[0][0] = -1 * FINGER_SPEED_SCALE;
+			moving_servos[0][1] = -1 * FINGER_SPEED_SCALE;
+		}
+		
 	}
 	
 	void update_ext() {
