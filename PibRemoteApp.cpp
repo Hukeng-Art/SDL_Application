@@ -68,7 +68,7 @@ public:
 		}
 		
 		SDL_SetWindowResizable(window, window_resizable);
-		key_states = SDL_GetKeyboardState(NULL);
+		key_states = SDL_GetKeyboardState(NULL); 
 		
 		// SDL_CreateRenderer() returns pointer to renderer for window
 		renderer = SDL_CreateRenderer(window, NULL);
