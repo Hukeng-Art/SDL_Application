@@ -12,7 +12,7 @@ class SDL_application {
 	
 	clock_t start;
 	clock_t end;
-	double delta;
+	float delta;
 	
 	// Default values - override in subclass
 	int window_width = 800;
@@ -23,7 +23,7 @@ class SDL_application {
 	
 	// debug vars, delete/comment out later
 	int debug_cycle_counter = 0;
-	double debug_second_counter = 0;
+	float debug_second_counter = 0;
 	
 	
 public:
@@ -129,21 +129,24 @@ private:
 	void update() {
 		
 		// TO DO : GET DELTA UPDATE WORKING!
-		/*
+		
 		end = clock();
-		delta = (double)(end-start) / CLOCKS_PER_SEC; // calculate duration of previous refresh cycle, set delta
+		delta = (float)(end-start) / CLOCKS_PER_SEC; // calculate duration of previous refresh cycle, set delta
 		start = clock();
+	
+		
+		SDL_Delay(10);
 		
 		debug_second_counter += delta;
 		debug_cycle_counter++;
-
+		
 		
 		if (debug_second_counter >= 1) {
 			std::cout << "One second elapsed - current speed: " << debug_cycle_counter << " FPS\n";
 			debug_cycle_counter = 0;
 			debug_second_counter = 0;
 		}
-		*/
+		
 				
 		update_ext();
 		

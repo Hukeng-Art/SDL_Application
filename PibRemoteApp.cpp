@@ -26,6 +26,8 @@ class PibRemoteApp {
 	clock_t end;
 	double delta;
 	
+	const bool* key_states;
+	
 	int debug_cycle_counter = 0;
 	double debug_second_counter = 0;
 	
@@ -66,6 +68,7 @@ public:
 		}
 		
 		SDL_SetWindowResizable(window, window_resizable);
+		key_states = SDL_GetKeyboardState(NULL);
 		
 		// SDL_CreateRenderer() returns pointer to renderer for window
 		renderer = SDL_CreateRenderer(window, NULL);
@@ -85,6 +88,8 @@ public:
 			throw std::runtime_error("Error setting window icon.");
 		}
 		SDL_DestroySurface(icon_surf); // free storage
+		
+		
 		
 		is_running = true;
 		
@@ -155,6 +160,8 @@ private:
 	}
 	
 	void update() {
+		
+		SDL_PumpEvents;
 				
 		update_ext();
 		
@@ -171,7 +178,6 @@ private:
 	
 	
 	void events_ext(SDL_Event event) {
-		const bool* key_states = SDL_GetKeyboardState(NULL);
 		
 		// upper arm
 		if (key_states[SDL_SCANCODE_E]) {
