@@ -4,6 +4,8 @@
 
 class SDL_application {
 	
+protected:
+	
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	SDL_Event event;
@@ -103,7 +105,7 @@ public:
 		}	
 	}
 	
-private:
+protected:
 
 	void events() {
 		while (SDL_PollEvent(&event)) { // poll until all events are handled
