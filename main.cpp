@@ -1,4 +1,4 @@
-#include "SDL_application.cpp"
+#include "SDL_Application.cpp"
 
 
 int main() {

@@ -1,8 +1,8 @@
-#include "SDL_application.h"
+#include "SDL_Application.h"
 
 
 
-class SDL_application {
+class SDL_Application {
 	
 	SDL_Window* window;
 	SDL_Renderer* renderer;
@@ -20,7 +20,7 @@ class SDL_application {
 	
 public:
 
-	SDL_application(int window_width = 800, int window_height = 500, const char* window_title = "Application", const char* icon = "assets/icon.png") { // Constructor
+	SDL_Application(int window_width = 800, int window_height = 500, const char* window_title = "Application", const char* icon = "assets/icon.png") { // Constructor
 		
 		if (!SDL_Init(SDL_FLAGS)) { // if SDL_Init fails, then...
 			throw std::runtime_error("Error initiating SDL.");
@@ -67,7 +67,7 @@ public:
 	}
 	
 	
-	~SDL_application(){ // DESTRUCTOR - CLEAN UP MEMORY
+	~SDL_Application(){ // DESTRUCTOR - CLEAN UP MEMORY
 		
 		free_ext();
 		

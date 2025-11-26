@@ -1,8 +1,8 @@
-#include "SDL_application.h"
+#include "SDL_Application.h"
 
 
 
-class SDL_application {
+class SDL_Application {
 	
 protected:
 	
@@ -30,7 +30,7 @@ protected:
 	
 public:
 
-	SDL_application() { // Constructor
+	SDL_Application() { // Constructor
 		
 		if (!SDL_Init(SDL_FLAGS)) { // if SDL_Init fails, then...
 			throw std::runtime_error("Error initiating SDL.");
@@ -76,7 +76,7 @@ public:
 	}
 	
 	
-	~SDL_application(){ // DESTRUCTOR - CLEAN UP MEMORY
+	~SDL_Application(){ // DESTRUCTOR - CLEAN UP MEMORY
 		
 		
 		if (renderer) { // if pointer to renderer is available
@@ -132,6 +132,7 @@ protected:
 		
 		// TO DO : GET DELTA UPDATE WORKING!
 		
+		/*
 		end = clock();
 		delta = (float)(end-start) / CLOCKS_PER_SEC; // calculate duration of previous refresh cycle, set delta
 		start = clock();
@@ -148,6 +149,7 @@ protected:
 			debug_cycle_counter = 0;
 			debug_second_counter = 0;
 		}
+		*/
 		
 				
 		update_ext();
