@@ -3,7 +3,7 @@
 
 int main() {
 	
-	SDL_application* test = new SDL_application();
+	SDL_Application* test = new SDL_Application();
 	
 	test->run();
 	

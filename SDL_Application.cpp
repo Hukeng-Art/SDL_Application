@@ -14,7 +14,7 @@ protected:
 	
 	clock_t start;
 	clock_t end;
-	float delta;
+	double delta;
 	
 	// Default values - override in subclass
 	int window_width = 800;
@@ -130,14 +130,28 @@ protected:
 	
 	void update() {
 		
-		// TO DO : GET DELTA UPDATE WORKING!
+		update_delta();		
+		update_ext();
 		
-		/*
+	}
+	
+	void draw() {
+		SDL_RenderClear(renderer); // clear renderer buffer
+		
+		draw_ext(); // extended draw function for actual application
+		
+		SDL_RenderPresent(renderer);
+		
+	}
+	
+private:
+	
+	void update_delta() { // update delta variable (time elapsed since last refresh cycle)
 		end = clock();
-		delta = (float)(end-start) / CLOCKS_PER_SEC; // calculate duration of previous refresh cycle, set delta
+		delta = (double)(end-start) / CLOCKS_PER_SEC; // calculate duration of previous refresh cycle, set delta
 		start = clock();
 	
-		
+		/*
 		SDL_Delay(10);
 		
 		debug_second_counter += delta;
@@ -150,19 +164,6 @@ protected:
 			debug_second_counter = 0;
 		}
 		*/
-		
-				
-		update_ext();
-		
-	}
-	
-	void draw() {
-		SDL_RenderClear(renderer); // clear renderer buffer
-		
-		draw_ext(); // extended draw function for actual application
-		
-		SDL_RenderPresent(renderer);
-		
 	}
 	
 	
