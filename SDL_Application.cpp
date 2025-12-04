@@ -12,8 +12,9 @@ protected:
 	
 	bool is_running;
 	
-	clock_t start;
-	clock_t end;
+	// delta and related values
+	uint64_t last_time;
+	uint64_t current_time;
 	double delta;
 	
 	// Default values - override in subclass
@@ -22,10 +23,6 @@ protected:
 	bool window_resizable = true;
 	const char* window_title = "Application";
 	const char* icon = "assets/icon.png";
-	
-	// debug vars, delete/comment out later
-	int debug_cycle_counter = 0;
-	float debug_second_counter = 0;
 	
 	
 public:
@@ -96,7 +93,7 @@ public:
 	
 	void run() {
 		
-		start = clock();
+		last_time = SDL_GetTicksNS();
 		
 		while(is_running) {
 			events();
@@ -122,18 +119,26 @@ protected:
 					break;
 			}
 			
-			events_ext(event);
-			
-		}	
+		}
+		
+		events_ext();
 		
 	}
 	
 	void update() {
 		
-		update_delta();		
+		// update events
+		SDL_PumpEvents; 
+		
+		// update delta variable
+		current_time = SDL_GetTicksNS();
+		delta = (double)(current_time - last_time) / (double)SDL_NS_PER_SECOND; // calculate duration of previous refresh cycle, set delta
+		last_time = current_time;
+		
 		update_ext();
 		
 	}
+	
 	
 	void draw() {
 		SDL_RenderClear(renderer); // clear renderer buffer
@@ -146,30 +151,10 @@ protected:
 	
 private:
 	
-	void update_delta() { // update delta variable (time elapsed since last refresh cycle)
-		end = clock();
-		delta = (double)(end-start) / CLOCKS_PER_SEC; // calculate duration of previous refresh cycle, set delta
-		start = clock();
-	
-		/*
-		SDL_Delay(10);
-		
-		debug_second_counter += delta;
-		debug_cycle_counter++;
-		
-		
-		if (debug_second_counter >= 1) {
-			std::cout << "One second elapsed - current speed: " << debug_cycle_counter << " FPS\n";
-			debug_cycle_counter = 0;
-			debug_second_counter = 0;
-		}
-		*/
-	}
-	
 	
 	// Virtual functions - extend in child classes
 	
-	virtual void events_ext(SDL_Event event) {}
+	virtual void events_ext() {}
 	virtual void update_ext() {}
 	virtual void draw_ext() {}
 	
