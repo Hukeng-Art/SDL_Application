@@ -111,9 +111,6 @@ protected:
 
 	void events() {
 		
-		// update events
-		SDL_PumpEvents;
-		
 		while (SDL_PollEvent(&event)) { // poll until all events are handled
 		
 			// check struct type of event
@@ -136,10 +133,13 @@ protected:
 	
 	void update() {
 		
+		SDL_PumpEvents();
+		
 		// update delta variable
 		current_time = SDL_GetTicksNS();
 		delta = (double)(current_time - last_time) / (double)SDL_NS_PER_SECOND; // calculate duration of previous refresh cycle, set delta
 		last_time = current_time;
+		
 		
 		update_ext();
 		
