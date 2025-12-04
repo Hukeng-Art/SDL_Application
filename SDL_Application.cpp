@@ -12,6 +12,9 @@ protected:
 	
 	bool is_running;
 	
+	//input and related values
+	const bool* key_states;
+	
 	// delta and related values
 	uint64_t last_time;
 	uint64_t current_time;
@@ -68,6 +71,8 @@ public:
 		}
 		SDL_DestroySurface(icon_surf); // free storage
 		
+		key_states = SDL_GetKeyboardState(NULL); // initialize keyboard state variable
+		
 		is_running = true;
 			
 	}
@@ -105,6 +110,10 @@ public:
 protected:
 
 	void events() {
+		
+		// update events
+		SDL_PumpEvents;
+		
 		while (SDL_PollEvent(&event)) { // poll until all events are handled
 		
 			// check struct type of event
@@ -126,9 +135,6 @@ protected:
 	}
 	
 	void update() {
-		
-		// update events
-		SDL_PumpEvents; 
 		
 		// update delta variable
 		current_time = SDL_GetTicksNS();
