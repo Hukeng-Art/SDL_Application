@@ -67,6 +67,11 @@ void SDL_Soundboard::free_audio(std::string id) {
 	
 void SDL_Soundboard::play_music(std::string id) {
 	
+	if (audios.find(id) == audios.end()) {
+		fprintf(stderr, "Error - id \"%s\" does not match any loaded track.\n", id);
+		return;
+	}
+	
 	if (!MIX_SetTrackAudio(music_track, audios[id])) {
 		fprintf(stderr, "Error setting music track: %s\n", SDL_GetError());
 	}
@@ -77,6 +82,12 @@ void SDL_Soundboard::play_music(std::string id) {
 
 
 void SDL_Soundboard::play_sfx(std::string id) {
+	
+	if (audios.find(id) == audios.end()) {
+		fprintf(stderr, "Error - id \"%s\" does not match any loaded track.\n", id);
+		return;
+	}
+	
 	if (!MIX_SetTrackAudio(sfx_track, audios[id])) {
 		fprintf(stderr, "Error setting sfx track: %s\n", SDL_GetError());
 	}
