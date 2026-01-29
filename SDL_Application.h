@@ -53,6 +53,9 @@ protected:
 	int window_width = 800;
 	int window_height = 500;
 	bool window_resizable = true;
+	
+protected:
+
 	const char* window_title = "Application";
 	const char* icon = "assets/icon.png";
 	
