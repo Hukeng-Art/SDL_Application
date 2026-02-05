@@ -115,6 +115,22 @@ void SDL_Application::events() {
 				is_running = false;
 				break;
 			
+			// TO DO: ENABLE BREAKING OF RUN LOOP WITH MULTIPLE WINDOWS OPEN
+			/*
+				
+			case SDL_WINDOWEVENT: // close game if main window is closed
+				switch (event.window.event) {
+					
+					case SDL_WINDOWEVENT_CLOSE:
+						is_running = false;
+						break;
+					
+					default:
+						break;
+					
+				}
+			*/
+			
 			default:
 				break;
 		}
