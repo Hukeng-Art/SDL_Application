@@ -153,7 +153,6 @@ void SDL_Application::update() {
 	delta = (double)(current_time - last_time) / (double)SDL_NS_PER_SECOND; // calculate duration of previous refresh cycle, set delta
 	last_time = current_time;
 	
-	
 	update_ext();
 	
 }
