@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/SDL_Application_test.dir/main.cpp.o -o SDL_Application_test  -lSDL3 -lSDL3_image -lSDL3_ttf -lSDL3_mixer
