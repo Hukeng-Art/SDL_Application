@@ -49,6 +49,7 @@ SDL_Application::SDL_Application() { // Constructor
 	
 	
 	// set up window icon - destroyed after use to free up memory
+	/*
 	SDL_Surface *icon_surf = IMG_Load(icon);
 	if (!icon_surf) {
 		throw std::runtime_error("Error loading icon surface.\n");
@@ -58,6 +59,7 @@ SDL_Application::SDL_Application() { // Constructor
 		throw std::runtime_error("Error setting window icon.\n");
 	}
 	SDL_DestroySurface(icon_surf); // free storage
+	*/
 	
 	key_states = SDL_GetKeyboardState(NULL); // initialize keyboard state variable
 	
